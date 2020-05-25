@@ -1,0 +1,288 @@
+﻿<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Data</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="http://code.highcharts.com/modules/data.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#submit-file').on("click", function (e) {
+                e.preventDefault();
+                $('#files').parse({
+                    config: {
+                        delimiter: "auto",
+                        complete: displayChart,
+                    },
+                    before: function (file, inputElem) {
+                        console.log("Parsing file...", file);
+                    },
+                    error: function (err, file) {
+                        console.log("ERROR:", err, file);
+                    },
+                    complete: function () {
+                        console.log("Done with all files");
+                    }
+                });
+            });
+
+            function displayChart(results) {
+                //var data = results.data;
+                console.log('123');
+            }
+
+            // csv-file to json object
+            function csvJSON(csv) {
+                var lines = csv.split("\n");
+                var result = [];
+                var headers = lines[0].split(",");
+
+                for (var i = 1; i < lines.length; i++) {
+                    var obj = {};
+                    var currentline = lines[i].split(",");
+
+                    for (var j = 0; j < headers.length; j++) {
+                        obj[headers[j]] = currentline[j];
+                    }
+                    result.push(obj);
+                }
+
+                return JSON.stringify(result);
+            }
+
+            $('#container1').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Argentina barley exports'
+                },
+                exporting: {
+                    enabled: true,
+                    buttons: {
+                        contextButton: {
+                            text: 'Export',
+                            theme: {
+                                fill: '#ddd',
+                                stroke: '#888',
+                                states: {
+                                    hover: {
+                                        fill: '#fcc',
+                                        stroke: '#f00'
+                                    },
+                                    select: {
+                                        fill: '#cfc',
+                                        stroke: '#0f0'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false,
+                    text: 'FarmLink Solutions',
+                    href: 'https://www.farmlinksolutions.ca/'
+                },
+                yAxis: {
+                    title: {
+                        text: 'thousand tonnes'
+                    }
+                },
+                xAxis: {
+                    categories: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+                },
+                tooltips: {
+                    pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
+                    backgroundColor: '#FCFFC5',
+                    valueSuffix: ' cm',
+                    borderWidth: 3,
+                    borderRadius: 6,
+                    shared: true
+                },
+                series: [{
+                    name: 'Argentina',
+                    data: [1600, 3600, 3500, 2700, 1500, 2100, 2150, 1800, 1950, 2300, 2400]
+                }
+                //{
+                //    name: 'grp2',
+                //    data: [12, 35, 46, 38, 22, 260, 335, 236, 77, 85]
+                //}
+                ]
+            });
+
+            $('#container2').highcharts({
+                chart: {
+                    type: 'areaspline',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Argentina exports'
+                },
+                credits: {
+                    enabled: false,
+                    text: 'FarmLink Solutions',
+                    href: 'https://www.farmlinksolutions.ca/'
+                },
+                yAxis: {
+                    title: {
+                        text: 'thousand tonnes'
+                    }
+                },
+                xAxis: {
+                    categories: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+                },
+                tooltips: {
+                    pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
+                    backgroundColor: '#FCFFC5',
+                    valueSuffix: ' cm',
+                    borderWidth: 3,
+                    borderRadius: 6,
+                    shared: true
+                },
+                series: [{
+                    name: 'wheat',
+                    color: 'yellow',
+                    data: [5060, 8700, 7900, 5800, 2300, 5000, 4100, 4300, 7750, 6890]
+                },
+                {
+                    name: 'barley',
+                    //color: 'brown',
+                    data: [1600, 3600, 3500, 2700, 1500, 2100, 2150, 1800, 1950, 2300, 2400]
+                }]
+            });
+
+            $('#container3').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        depth: 50,
+                        viewDistanse: 25
+                    }
+                },
+                title: {
+                    text: 'Global canola yield: tonnes/hectare'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                credits: {
+                    enabled: false,
+                },
+                yAxis: {
+                    title: {
+                        text: 'tonnes/hectare'
+                    }
+                },
+                xAxis: {
+                    categories: ['2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+                },
+               
+                series: [{
+                    name: '',
+                    color: 'orange',
+                    data: [1.9, 3.5, 2.7, 3.4, 3.5, 3.7, 4.3, 3.9, 4.8, 5.5, 4.7, 4.5, 6.4, 7.4, 8.2, 7.9, 10.04]
+                }]
+            });
+
+            $('#container4').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Argentina barley exports'
+                },
+                credits: {
+                    enabled: false,
+                    text: 'FarmLink Solutions',
+                    href: 'https://www.farmlinksolutions.ca/'
+                },
+                yAxis: {
+                    title: {
+                        text: 'thousand tonnes'
+                    }
+                },
+                xAxis: {
+                    categories: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+                },
+                tooltips: {
+                    pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
+                    backgroundColor: '#FCFFC5',
+                    valueSuffix: ' cm',
+                    borderWidth: 3,
+                    borderRadius: 6,
+                    shared: true
+                },
+                series: [{
+                    name: 'Argentina',
+                    type: 'column',
+                    data: [1600, 3600, 3500, 2700, 1500, 2100, 2150, 1800, 1950, 2300, 2400]
+                },
+                {
+                    name: 'Top',
+                    type: 'line',
+                    data: [1600, 3600, 3500, 2700, 1500, 2100, 2150, 1800, 1950, 2300, 2400]
+                }
+                ]
+            });
+
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <div>Testing (static data):</div>
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="files">
+                Upload a CSV formatted file:
+                <span style="color:red;">(does not work without server part)</span>
+            </label>
+            <input type="file" id="files" class="form-control" accept=".csv" required />
+        </div>
+        <div class="form-group">
+            <button type="submit" id="submit-file" class="btn btn-primary">Upload File</button>
+        </div>
+    </form>
+    <div class="alert alert-warning" role="alert">
+        Select a range using mouse to zoom it.
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <div id="container1" style="width: 100%; height: 300px; padding-top: 10px;"></div>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <div id="container2" style="width: 100%; height: 300px; padding-top: 10px;"></div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div id="container3" style="width: 100%; height: 300px; padding-top: 10px;"></div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div id="container4" style="width: 100%; height: 300px; padding-top: 10px;"></div>
+        </div>
+    </div>
+
+</body>
+</html>
